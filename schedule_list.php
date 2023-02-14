@@ -134,11 +134,11 @@ $read_qry = mysqli_query($conn, "SELECT * FROM `schedule`");
                 <input type="text" name="update_id" id="update_id" class="form-control" value= "<?php echo $row['schedule_id']?>">
                 <div class="form-group">
               <label for="">Time in</label>
-              <input type="time" name="time_in" id="time_in" class="form-control" value="<?php echo $row['time_in']?>">
+              <input type="text" name="time_in" id="time_in" class="form-control" value="<?php echo $row['time_in']?>">
             </div>
             <div class="form-group">
               <label for="">Time out</label>
-              <input type="time" name="time_out" id="time_out" class="form-control" value="<?php echo $row['time_out']?>">
+              <input type="text" name="time_out" id="time_out" class="form-control" value="<?php echo $row['time_out']?>">
             </div>
             </div>
             <div class="modal-footer">
