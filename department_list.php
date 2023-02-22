@@ -82,7 +82,7 @@ $read_qry = mysqli_query($conn, "SELECT * FROM `department`");
   <!-- /.content-wrapper -->
 <?php include'layout/footer.php'?>
 
-
+<!-- Add Department -->
 <div class="modal fade" id="add_dep">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -135,6 +135,8 @@ $read_qry = mysqli_query($conn, "SELECT * FROM `department`");
       </div>
       <?php }?>
 
+
+      
 
        <!-- Delete Department-->
       <?php foreach ($read_qry as $row){?>

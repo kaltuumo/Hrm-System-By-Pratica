@@ -52,6 +52,7 @@ $qry_emp = mysqli_query($conn, "SELECT * FROM employee");
                     <th>Address</th>
                     <th>Department</th>
                     <th>Schedule</th>
+                    <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -77,6 +78,9 @@ $qry_emp = mysqli_query($conn, "SELECT * FROM employee");
                         echo $sch_row['time_in'], '-', $sch_row['time_out'];
                       }
                     }?></td>
+                    <td><button class="btn btn-primary btn-sm" data-toggle ="modal" data-target="#edit_emp<?php echo $emp['employee_id']?>"><i class="fa fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm" data-toggle ="modal" data-target="#delete_emp<?php echo $emp['employee_id']?>"><i class="fa fa-trash"></i></button>
+                  </td>
                   </tr>
                   <?php }?>
                
@@ -165,6 +169,67 @@ $qry_emp = mysqli_query($conn, "SELECT * FROM employee");
         </div>
         <!-- /.modal-dialog -->
       </div>
+
+
+        <!-- Edit Employee-->
+        <?php foreach ($qry_emp as $emp){?>
+      <div class="modal fade" id="edit_emp<?php echo $emp['employee_id']?>">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Edit Employee</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="update/department_update.php" method="post">
+                <input type="hidden" name="update_id" id="update_id" class="form-control" value= "<?php echo $emp['employee_id']?>">
+                <input type="text" name="photo" id="photo" class="form-control" required value = "<?php echo $emp['photo']?>">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button type="submit" name="update" class="btn btn-primary">Update</button>
+            </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <?php }?>
+
+
+
+      <!-- Delete Department-->
+      <?php foreach ($qry_emp as $emp){?>
+      <div class="modal fade" id="delete_emp<?php echo $emp['employee_id']?>">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-danger">
+              <h4 class="modal-title">Delete Employee</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="delete/employee_delete.php" method="post">
+                <input type="text" name="delete_id" id="delete_id" class="form-control" value= "<?php echo $emp['employee_id']?>">
+                 <h4>Are You Sure to Delete Data</h4>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button type="submit" name="delete" class="btn btn-warning">Yes Delete it!</button>
+            </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <?php }?>
+      <!-- /.modal -->
+      <!-- /.modal -->
 
 <?php include'layout/footer.php'?>
 <!-- <script src="../../dist/js/demo.js"></script> -->
