@@ -2,9 +2,7 @@
 include('layout/conn.php');
 $qry_dep = mysqli_query($conn, "SELECT * FROM department");
 $qry_sch = mysqli_query($conn, "SELECT * FROM schedule");
-$qry_emp = mysqli_query($conn, "SELECT * FROM `employee` e
-INNER JOIN schedule s ON s.schedule_id = e.schedule_id
-INNER JOIN department d ON d.department_id = e.department_id");
+$qry_emp = mysqli_query($conn, "SELECT * FROM employee");
 ?>
 
   <!-- Content Wrapper. Contains page content -->
@@ -67,14 +65,22 @@ INNER JOIN department d ON d.department_id = e.department_id");
                     <td><?php echo $emp['employee_name']?></td>
                     <td><?php echo $emp['phone']?></td>
                     <td><?php echo $emp['address']?></td>
-  
-                   <td><?php echo $emp['department_name']?></td>
-                   <td><?php echo $emp['time_in'], '-', $emp['time_out']?></td>
+                    <td><?php foreach($qry_dep as $dep_row){
+                      if($dep_row['department_id'] == $emp['department_id']){
+                        echo $dep_row['department_name'];
+                      }
+                    }?></td>
+                  </td>
+                    
 
-               
+                    <td><?php foreach($qry_sch as $sch_row){
+                      if($sch_row['schedule_id'] == $emp['schedule_id']){
+                        echo $sch_row['time_in'], '-', $sch_row['time_out'];
+                      }
+                    }?></td>
                     <td><button class="btn btn-primary btn-sm" data-toggle ="modal" data-target="#edit_emp<?php echo $emp['employee_id']?>"><i class="fa fa-edit"></i></button>
                     <button class="btn btn-danger btn-sm" data-toggle ="modal" data-target="#delete_emp<?php echo $emp['employee_id']?>"><i class="fa fa-trash"></i></button>
-                  
+                  </td>
                   </tr>
                   <?php }?>
                
@@ -99,7 +105,7 @@ INNER JOIN department d ON d.department_id = e.department_id");
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Add Employee</h4>
+              <h4 class="modal-title">Add Department</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -171,15 +177,13 @@ INNER JOIN department d ON d.department_id = e.department_id");
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Edit Employee</h4>
+              <h4 class="modal-title">Add Department</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <form action="update/employee_update.php" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="update_id" id="update_id" value="<?php echo $emp['employee_id'] ?>">
-                <input type="hidden" name="old_photo" id="old_photo" value="<?php echo $emp['photo'] ?>">
+              <form action="insert/employee_insert.php" method="post" enctype="multipart/form-data">
                 <label for="">Employee Name</label>
                 <input type="text" name="emp_name" id="emp_name" value ="<?php echo $emp['employee_name']?>" class="form-control" required>
 
@@ -198,40 +202,28 @@ INNER JOIN department d ON d.department_id = e.department_id");
                   <div class="col-md-6">
                     <label for="">Department</label>
                     <select name="dep_id" id="dep_id" class="form-control" required>
-                      <option value="<?php echo $emp['department_id']?>"><?php echo $emp['department_name']?></option>
-
-                      <?php 
-                      $d_id = $emp['department_id'];
-                      foreach($qry_dep as $dep){
-                        if($d_id == $dep['department_id']){}else{
-                        ?>
+                      <option value="">none</option>
+                      <?php foreach($qry_dep as $dep){?>
                         <option value="<?php echo $dep['department_id']?>"><?php echo $dep['department_name']?></option>
-                        <?php }}?>
+                        <?php }?>
                     </select>
                   
                   </div>
                   <div class="col-md-6">
                     <label for="">Schedule</label>
                     <select name="sch_id" id="sch_id" class="form-control" required>
-                      <option value="<?php echo $emp['schedule_id']?>"><?php echo $emp['time_in'], '-', $emp['time_out']; ?></option>
-                      <?php foreach($qry_sch as $sch){
-                        if($emp['schedule_id'] == $sch['schedule_id']){}else{
-                        ?>
+                      <option value="">none</option>
+                      <?php foreach($qry_sch as $sch){?>
                         <option value="<?php echo $sch['schedule_id']?>"><?php echo $sch['time_in'], '-', $sch['time_out']?></option>
-                        <?php }}?>
+                        <?php }?>
                     </select>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6">
                     <label for="">Sex</label><br>
-                    <?php if($emp['sex'] == 'Male'){?>
-                    <input type="radio" name="sex" id="sex" value="Male" checked>Male
-                    <input type="radio" name="sex" id="sex" value="Female">Female
-                    <?php }else{?>
-                      <input type="radio" name="sex" id="sex" value="Male" checked>Male
-                    <input type="radio" name="sex" id="sex" value="Female" checked>Female
-                    <?php }?>
+                    <input type="radio" name="sex" id="sex" value="sex">Male
+                    <input type="radio" name="sex" id="sex" value="sex">Female
                   </div>
                   <div class="col-md-6">
                     <label for="">Upload Photo</label>
@@ -241,7 +233,7 @@ INNER JOIN department d ON d.department_id = e.department_id");
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-              <button type="submit" name="update" class="btn btn-success">Update</button>
+              <button type="submit" name="save" class="btn btn-primary">Save changes</button>
             </div>
             </form>
           </div>
