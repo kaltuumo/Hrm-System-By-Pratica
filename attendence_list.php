@@ -59,7 +59,12 @@ $read_qry = mysqli_query($conn, "SELECT * FROM `attendence`");
                     
                     <td><?php echo $row['date']?></td>
                     <td><?php echo $row['emp_id']?></td>
-                    <td><?php echo $row['status']?></td>
+                    <td><?php if($row['status'] == 1){?>
+                      <span class="page badge-pill badge-success">Ontime</span>
+                      <?php } else {?>
+                      <span class="page badge-pill badge-warning">Late</span>
+                      <?php }?>
+                    </td>
                     <td><?php echo $row['time_in']?></td>
                     <td><?php echo $row['time_out']?></td>
                     
